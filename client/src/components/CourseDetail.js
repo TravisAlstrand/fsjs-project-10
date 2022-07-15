@@ -19,7 +19,6 @@ const CourseDetail = () => {
 	}, []);
 
 	if(course !== null) {
-		console.log(course);
 		return(
 			<main>
 				<div className="actions--bar">

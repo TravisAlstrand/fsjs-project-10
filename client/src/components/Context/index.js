@@ -10,6 +10,9 @@ export const Provider = (props) => {
   // state for single course
   const [ course, setCourse ] = useState(null);
 
+  // state for signed in user
+  const [ user, setUser ] = useState(null);
+
   // method to control all api requests
   function api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
     const url = 'http://localhost:5000/api' + path;
@@ -25,17 +28,17 @@ export const Provider = (props) => {
       options.body = JSON.stringify(body);
     }
 
-    // if (requiresAuth) {
-    //   const encodedCredentials = Buffer.from(`${credentials.username}:${credentials.password}`).toString('base64'); 
-    //   options.headers['Authorization'] = `Basic ${encodedCredentials}`;
-    // }
+    if (requiresAuth) {
+      const encodedCredentials = `${credentials.username}:${credentials.password}`; 
+      options.headers['Authorization'] = `Basic ${encodedCredentials}`;
+    }
 
     return fetch(url, options);
   };
 
-  /* =================================== */
-  /* ------------- API CALLS ----------- */
-  /* =================================== */
+  /* ========================================== */
+  /* ------------- COURSE API CALLS ----------- */
+  /* ========================================== */
 
   // function to fetch courses from api db
   async function handleFetchCourses() {
@@ -72,14 +75,64 @@ export const Provider = (props) => {
     }
   };
 
+  // function to create (POST) a new course
+  async function handleCreateNewCourse(courseBody) {
+    const response = await api('/courses', 'POST', courseBody);
+
+    // if created successfully...
+    if (response.status === 201) {
+      return true; /* return true to CreateCourse.js call */
+    } else if (response.status === 400) {
+      return response.json()
+        .then(data => {return data.validationErrors;})
+    } else {
+      throw new Error();
+    }
+  }
+
+  /* ========================================== */
+  /* -------------- USER API CALLS ------------ */
+  /* ========================================== */
+
+  // function to sign in existing user
+  async function handleSignIn(username, password) {
+    const response = await api('/users', 'GET', null, true, {username, password});
+    
+    if (response.status === 200) {
+      response.json()
+        .then(data => setUser(data)); /* set user state to response */
+      return (user);
+    } else {
+      throw new Error();
+    }
+  }
+
+  // function to create new user
+  async function handleSignUp(userBody) {
+    const response = await api('/users', 'POST', userBody);
+
+    if (response.status === 201) {
+      return true; /* return true to UserSignUp.js call */
+    } else if (response.status === 400) {
+      return response.json()
+      .then(data => {return data.validationErrors;})
+    } else {
+      throw new Error();
+    };
+  };
+
   // return the provider with the states and functions allowing app's children to be placed inside
   return(
     <CoursesContext.Provider value={{
       courses,
-      course, 
+      course,
+      user,
       actions: {
         fetchCourses: handleFetchCourses,
-        fetchSingleCourse: handleFetchSingleCourse
+        fetchSingleCourse: handleFetchSingleCourse,
+        createCourse: handleCreateNewCourse,
+        signIn: handleSignIn,
+        signUp: handleSignUp
       }
     }}>
       {props.children}
