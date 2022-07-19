@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Buffer } from 'buffer';
 
 export const CoursesContext = React.createContext();
 
@@ -29,8 +30,8 @@ export const Provider = (props) => {
     }
 
     if (requiresAuth) {
-      const encodedCredentials = `${credentials.username}:${credentials.password}`; 
-      options.headers['Authorization'] = `Basic ${encodedCredentials}`;
+      const encryptedCredentials = Buffer.from(`${credentials.username}:${credentials.password}`).toString('base64'); 
+      options.headers['Authorization'] = `Basic ${encryptedCredentials}`;
     }
 
     return fetch(url, options);
