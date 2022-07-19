@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
+import ReactMarkdown from 'react-markdown'
 import { CoursesContext } from './Context';
 
 const CourseDetail = () => {
@@ -36,15 +37,13 @@ const CourseDetail = () => {
 								<h3 className="course--detail--title">Course</h3>
 								<h4 className="course--name">{course.course.title}</h4>
 								<p>By {course.course.creator.firstName} {course.course.creator.lastName}</p>
-								<p>{course.course.description}</p>
+								<ReactMarkdown>{course.course.description}</ReactMarkdown>
 							</div>
 							<div>
 								<h3 className="course--detail--title">Estimated Time</h3>
 								<p>{course.course.estimatedTime}</p>
 								<h3 className="course--detail--title">Materials Needed</h3>
-								<ul className="course--detail--list">
-									<li>{course.course.materialsNeeded}</li>
-								</ul>
+								<ReactMarkdown className="course--detail--list">{course.course.materialsNeeded}</ReactMarkdown>
 							</div>
 						</div>
 					</form>
