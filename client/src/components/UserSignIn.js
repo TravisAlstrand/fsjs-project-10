@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CoursesContext } from './Context';
 
 const UserSignIn = () => {
@@ -8,6 +8,8 @@ const UserSignIn = () => {
 
   const [emailAddress, setEmailAddress] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigate = useNavigate();
 
   // function to handle sign in submit
   function handleSubmit(e) {
@@ -18,6 +20,7 @@ const UserSignIn = () => {
       .then (response => {
         if (response !== null) {
           console.log('sign in worked!');
+          navigate('/');
         } else {
           console.log('sign in failed!');
         };

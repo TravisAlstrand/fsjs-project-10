@@ -95,14 +95,15 @@ export const Provider = (props) => {
   /* -------------- USER API CALLS ------------ */
   /* ========================================== */
 
-  // function to sign in existing user
+  // function to get user info & sign in
   async function handleSignIn(username, password) {
     const response = await api('/users', 'GET', null, true, {username, password});
     
     if (response.status === 200) {
-      response.json()
+      return response.json()
         .then(data => setUser(data)); /* set user state to response */
-      return (user);
+    } else if (response.status === 401) {
+      return null
     } else {
       throw new Error();
     }
@@ -122,6 +123,11 @@ export const Provider = (props) => {
     };
   };
 
+  function handleSignOut() {
+    setUser(null); 
+    return (user)
+  };
+
   // return the provider with the states and functions allowing app's children to be placed inside
   return(
     <CoursesContext.Provider value={{
@@ -133,7 +139,8 @@ export const Provider = (props) => {
         fetchSingleCourse: handleFetchSingleCourse,
         createCourse: handleCreateNewCourse,
         signIn: handleSignIn,
-        signUp: handleSignUp
+        signUp: handleSignUp,
+        signOut: handleSignOut
       }
     }}>
       {props.children}
