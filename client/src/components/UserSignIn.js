@@ -19,7 +19,6 @@ const UserSignIn = () => {
     actions.signIn(emailAddress, password)
       .then (response => {
         if (response !== null) {
-          console.log('sign in worked!');
           navigate('/');
         } else {
           console.log('sign in failed!');

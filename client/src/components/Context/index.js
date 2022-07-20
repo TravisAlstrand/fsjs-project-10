@@ -34,7 +34,9 @@ export const Provider = (props) => {
       options.headers['Authorization'] = `Basic ${encryptedCredentials}`;
     }
 
-    return fetch(url, options);
+    const results = fetch(url, options); 
+
+    return (results);
   };
 
   /* ========================================== */

@@ -7,6 +7,7 @@ const CourseDetail = () => {
 
 	const { actions } = useContext(CoursesContext);
   const { course } = useContext(CoursesContext);
+	const { user } = useContext(CoursesContext);
 
 	// get the id param from the url
 	const { id } = useParams();
@@ -24,8 +25,18 @@ const CourseDetail = () => {
 			<main>
 				<div className="actions--bar">
 						<div className="wrap">
-								<Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-								<a className="button" href="#">Delete Course</a>
+								{ user ? (
+									user.id === course.course.userId ? (
+										<>
+										<Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
+										<a className="button" href="#">Delete Course</a>
+										</>
+									) : (
+										<></>
+									)) : (
+										<></>
+								)}
+
 								<Link className="button button-secondary" to="/">Return to List</Link>
 						</div>
 				</div>
