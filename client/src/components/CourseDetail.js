@@ -1,4 +1,4 @@
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import ReactMarkdown from 'react-markdown'
 import { CoursesContext } from './Context';
@@ -12,24 +12,35 @@ const CourseDetail = () => {
 	// get the id param from the url
 	const { id } = useParams();
 
+	const navigate = useNavigate();
+
 	// after the component renders, call function to fetch single course data
 	useEffect(() => {
 		const getCourse = async () => {
 			await actions.fetchSingleCourse(id);
 		};
 		getCourse();
-	}, []);
+	}, [actions, id]);
+
+	const deleteCourse = () => {
+		actions.deleteCourse(course.course.id)
+			.then(res => {
+				if (res === true) {
+					navigate('/');
+				}
+			})
+	}
 
 	if(course !== null) {
 		return(
 			<main>
 				<div className="actions--bar">
 						<div className="wrap">
-								{ user ? (
-									user.id === course.course.userId ? (
+								{ user !== null ? (
+									user.userId === course.course.userId ? (
 										<>
 										<Link className="button" to={`/courses/${id}/update`}>Update Course</Link>
-										<a className="button" href="#">Delete Course</a>
+										<button className="button" href="/" onClick={deleteCourse}>Delete Course</button>
 										</>
 									) : (
 										<></>

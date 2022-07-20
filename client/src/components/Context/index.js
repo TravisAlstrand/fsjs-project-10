@@ -89,7 +89,7 @@ export const Provider = (props) => {
 
   // function to create (POST) a new course
   async function handleCreateNewCourse(courseBody) {
-    const response = await api('/courses', 'POST', courseBody, true, {authedUsername, authedUserPass});
+    const response = await api('/courses', 'POST', courseBody, true, {username: authedUsername, password: authedUserPass});
 
     // if created successfully...
     if (response.status === 201) {
@@ -100,6 +100,22 @@ export const Provider = (props) => {
       return(validationErrors);  
     } else {
       throw new Error();
+    }
+  }
+
+  async function handleUpdateCourse(id, courseBody) {
+    const response = await api(`/courses/${id}`, 'PUT', courseBody, true, {username: authedUsername, password: authedUserPass});
+    
+    if (response.status === 204) {
+      return true;
+    }
+  }
+
+  async function handleDeleteCourse(id) {
+    const response = await api(`/courses/${id}`, 'DELETE', null, true, {username: authedUsername, password: authedUserPass});
+
+    if (response.status === 204) {
+      return true;
     }
   }
 
@@ -153,9 +169,11 @@ export const Provider = (props) => {
         fetchCourses: handleFetchCourses,
         fetchSingleCourse: handleFetchSingleCourse,
         createCourse: handleCreateNewCourse,
+        updateCourse: handleUpdateCourse,
         signIn: handleSignIn,
         signUp: handleSignUp,
-        signOut: handleSignOut
+        signOut: handleSignOut,
+        deleteCourse: handleDeleteCourse
       }
     }}>
       {props.children}

@@ -4,8 +4,7 @@ import { CoursesContext } from './Context';
 
 const CreateCourse = () => {
 
-  const { actions } = useContext(CoursesContext);
-  const { user } = useContext(CoursesContext);
+  const { actions, user } = useContext(CoursesContext);
 
   const navigate = useNavigate();
 
@@ -25,7 +24,7 @@ const CreateCourse = () => {
       description,
       estimatedTime,
       materialsNeeded,
-      userId: user.id
+      userId: user.userId
     }
 
     // call the handleCreateNewCourse function sending body object above

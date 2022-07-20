@@ -28,11 +28,12 @@ function App() {
         <Route path='/forbidden' element={ <Forbidden /> } />
         <Route path='/not-found' element={ <NotFound /> } />
         <Route path='/error' element={ <Error /> } />
-        <Route element={ <PrivateRoute /> }>
-          <Route path='/courses/:id/update' element={ <UpdateCourse /> } />
-          <Route path='/courses/create' element={ <CreateCourse /> } />
-        </Route>
         <Route path='/courses/:id' element={ <CourseDetail /> } />
+        <Route element={ <PrivateRoute /> }>
+          <Route path='/courses/create' element={ <CreateCourse /> } />
+          <Route path='/courses/:id/update' element={ <UpdateCourse /> } />
+        </Route>
+        
       </Routes>
     </>
   );
