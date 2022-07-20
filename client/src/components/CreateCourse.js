@@ -1,10 +1,13 @@
 import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CoursesContext } from './Context';
 
 const CreateCourse = () => {
 
   const { actions } = useContext(CoursesContext);
+  const { user } = useContext(CoursesContext);
+
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -21,7 +24,8 @@ const CreateCourse = () => {
       title,
       description,
       estimatedTime,
-      materialsNeeded
+      materialsNeeded,
+      userId: user.id
     }
 
     // call the handleCreateNewCourse function sending body object above
@@ -29,7 +33,7 @@ const CreateCourse = () => {
       .then(response => {
         // if successful...
         if (response === true) {
-          // do something...
+          navigate('/');
         } 
         // if unsuccessful, set errors state with returned errors
         else {
@@ -43,15 +47,20 @@ const CreateCourse = () => {
       <div className="wrap">
         <h2>Create Course</h2>
         
-        {/* {if (errors) {
+        {errors.length > 0 ? (
           <div className="validation--errors">
             <h3>Validation Errors</h3>
             <ul>
-              <li>Please provide a value for "Title"</li>
-              <li>Please provide a value for "Description"</li>
+              {errors.map((error, index) => {
+                return ( 
+                  <li key={index}>{error}</li>
+                )
+              })}
             </ul>
           </div>  
-        }} */}
+        ) : (
+          <></>
+        )}
 
         <form onSubmit={handleSubmit}>
           <div className="main--flex">
@@ -59,7 +68,7 @@ const CreateCourse = () => {
                 <label htmlFor="courseTitle">Course Title</label>
                 <input id="courseTitle" name="courseTitle" type="text" onChange={e => setTitle(e.target.value)} />
 
-                <p>By Joe Smith</p>
+                <p>By {user.firstName} {user.lastName}</p>
 
                 <label htmlFor="courseDescription">Course Description</label>
                 <textarea id="courseDescription" name="courseDescription" onChange={e => setDescription(e.target.value)}></textarea>

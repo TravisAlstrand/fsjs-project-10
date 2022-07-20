@@ -14,6 +14,15 @@ export const Provider = (props) => {
   // state for signed in user
   const [ user, setUser ] = useState(null);
 
+  // state for username
+  const [ authedUsername, setAuthedUsername ] = useState('');
+
+  // state for password
+  const [ authedUserPass, setAuthedUserPass ] = useState('');
+
+  // state for validation errors
+  const [ validationErrors, setValidationErrors ] = useState([]);
+
   // method to control all api requests
   function api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
     const url = 'http://localhost:5000/api' + path;
@@ -80,14 +89,15 @@ export const Provider = (props) => {
 
   // function to create (POST) a new course
   async function handleCreateNewCourse(courseBody) {
-    const response = await api('/courses', 'POST', courseBody);
+    const response = await api('/courses', 'POST', courseBody, true, {authedUsername, authedUserPass});
 
     // if created successfully...
     if (response.status === 201) {
       return true; /* return true to CreateCourse.js call */
     } else if (response.status === 400) {
-      return response.json()
-        .then(data => {return data.validationErrors;})
+      response.json()
+        .then(data => setValidationErrors(data));
+      return(validationErrors);  
     } else {
       throw new Error();
     }
@@ -102,6 +112,8 @@ export const Provider = (props) => {
     const response = await api('/users', 'GET', null, true, {username, password});
     
     if (response.status === 200) {
+      setAuthedUsername(username);
+      setAuthedUserPass(password);
       return response.json()
         .then(data => setUser(data)); /* set user state to response */
     } else if (response.status === 401) {
@@ -126,8 +138,9 @@ export const Provider = (props) => {
   };
 
   function handleSignOut() {
-    setUser(null); 
-    return (user)
+    setUser(null);
+    setAuthedUsername('');
+    setAuthedUserPass('');
   };
 
   // return the provider with the states and functions allowing app's children to be placed inside
