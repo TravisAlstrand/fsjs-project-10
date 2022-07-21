@@ -12,10 +12,10 @@ const UpdateCourse = () => {
   const { actions } = useContext(CoursesContext);
   const { course, user } = useContext(CoursesContext);
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [estimatedTime, setEstimatedTime] = useState(null);
-  const [materialsNeeded, setMaterialsNeeded] = useState(null);
+  const [title, setTitle] = useState(course.course.title);
+  const [description, setDescription] = useState(course.course.description);
+  const [estimatedTime, setEstimatedTime] = useState(course.course.estimatedTime);
+  const [materialsNeeded, setMaterialsNeeded] = useState(course.course.materialsNeeded);
 
   // after the component renders, call function to fetch single course data
   useEffect(() => {
@@ -24,6 +24,8 @@ const UpdateCourse = () => {
     };
     getCourse();
   }, [actions, id]);
+
+
 
   // calls update course PUT request in index.js
   const handleSubmit = (e) => {
