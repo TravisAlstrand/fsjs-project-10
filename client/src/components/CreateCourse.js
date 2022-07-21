@@ -12,7 +12,7 @@ const CreateCourse = () => {
   const [description, setDescription] = useState('');
   const [estimatedTime, setEstimatedTime] = useState(null);
   const [materialsNeeded, setMaterialsNeeded] = useState(null);
-  const [errors, setErrors] = useState([]);
+  const [errors, setErrors] = useState({});
 
   // function to handle form submit
   function handleSubmit(e) {
@@ -37,6 +37,7 @@ const CreateCourse = () => {
         // if unsuccessful, set errors state with returned errors
         else {
           setErrors(response);
+          console.log(errors);
         }
       });
   }

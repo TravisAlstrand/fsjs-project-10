@@ -20,9 +20,6 @@ export const Provider = (props) => {
   // state for password
   const [ authedUserPass, setAuthedUserPass ] = useState('');
 
-  // state for validation errors
-  const [ validationErrors, setValidationErrors ] = useState([]);
-
   // method to control all api requests
   function api(path, method = 'GET', body = null, requiresAuth = false, credentials = null) {
     const url = 'http://localhost:5000/api' + path;
@@ -95,9 +92,8 @@ export const Provider = (props) => {
     if (response.status === 201) {
       return true; /* return true to CreateCourse.js call */
     } else if (response.status === 400) {
-      response.json()
-        .then(data => setValidationErrors(data));
-      return(validationErrors);  
+      const valErrors = await response.json();
+      return valErrors;
     } else {
       throw new Error();
     }
