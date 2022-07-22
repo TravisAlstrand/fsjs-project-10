@@ -23,8 +23,8 @@ const UpdateCourse = () => {
     const getCourse = async () => {
       await actions.fetchSingleCourse(id);
     };
-    getCourse();
-  }, [actions, id]);
+    getCourse(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
 
 

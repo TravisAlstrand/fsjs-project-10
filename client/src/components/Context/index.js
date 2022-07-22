@@ -95,18 +95,22 @@ export const Provider = (props) => {
     return response.json();
   }
 
+  // function to update an existing course
   async function handleUpdateCourse(id, courseBody) {
     const response = await api(`/courses/${id}`, 'PUT', courseBody, true, {username: authedUsername, password: authedUserPass});
     
+    // if update is successfull...
     if (response.status === 204) {
       return true;
     }
     return response.json();
   }
 
+  // function to delete an existing course
   async function handleDeleteCourse(id) {
     const response = await api(`/courses/${id}`, 'DELETE', null, true, {username: authedUsername, password: authedUserPass});
 
+    // if delete is successfull...
     if (response.status === 204) {
       return true;
     }

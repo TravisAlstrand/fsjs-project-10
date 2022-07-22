@@ -12,8 +12,8 @@ const Courses = () => {
     const getCourses = async () => {
       await actions.fetchCourses();
     }
-    getCourses();
-  }, [courses]);
+    getCourses(); // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return(
     <main>
