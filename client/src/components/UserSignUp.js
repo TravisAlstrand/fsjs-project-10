@@ -1,10 +1,12 @@
 import { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { CoursesContext } from './Context';
 
 const UserSignUp = () => {
 
   const { actions } = useContext(CoursesContext);
+
+  const navigate = useNavigate();
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -26,21 +28,11 @@ const UserSignUp = () => {
     // call the handleSignUp function sending body object above
     actions.signUp(userBody)
       .then(response => {
-        // if successful...
-        if (response === true) {
-          // call sign in function 
+        if (response.errors) {
+          setErrors(response.errors);
+        } else {
           actions.signIn(emailAddress, password)
-          .then (response => {
-            if (response !== null) {
-              console.log('sign in worked!');
-            } else {
-              console.log('sign in failed!');
-            };
-          });
-        } 
-        // if unsuccessful, set errors state with returned errors
-        else {
-          setErrors(response);
+          navigate('/');
         }
       });
   }
@@ -49,6 +41,22 @@ const UserSignUp = () => {
     <main>
       <div className="form--centered">
         <h2>Sign Up</h2>
+
+        {errors.length > 0 ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
+              {errors.map((error, index) => {
+                return ( 
+                  <li key={index}>{error}</li>
+                )
+              })}
+            </ul>
+          </div>  
+        ) : (
+          <></>
+        )}
+
         <form onSubmit={handleSubmit}>
           <label htmlFor="firstName">First Name</label>
           <input id="firstName" name="firstName" type="text" onChange={e => setFirstName(e.target.value)} />

@@ -30,14 +30,11 @@ const CreateCourse = () => {
     // call the handleCreateNewCourse function sending body object above
     actions.createCourse(courseBody)
       .then(response => {
-        // if successful...
-        if (response === true) {
+        // if there were errors
+        if (response.errors) {
+          setErrors(response.errors);
+        } else { /* if successful */
           navigate('/');
-        } 
-        // if unsuccessful, set errors state with returned errors
-        else {
-          setErrors(response);
-          console.log(errors);
         }
       });
   }

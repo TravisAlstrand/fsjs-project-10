@@ -90,13 +90,9 @@ export const Provider = (props) => {
 
     // if created successfully...
     if (response.status === 201) {
-      return true; /* return true to CreateCourse.js call */
-    } else if (response.status === 400) {
-      const valErrors = await response.json();
-      return valErrors;
-    } else {
-      throw new Error();
-    }
+      return response;
+    } 
+    return response.json();
   }
 
   async function handleUpdateCourse(id, courseBody) {
@@ -105,6 +101,7 @@ export const Provider = (props) => {
     if (response.status === 204) {
       return true;
     }
+    return response.json();
   }
 
   async function handleDeleteCourse(id) {
@@ -140,13 +137,9 @@ export const Provider = (props) => {
     const response = await api('/users', 'POST', userBody);
 
     if (response.status === 201) {
-      return true; /* return true to UserSignUp.js call */
-    } else if (response.status === 400) {
-      return response.json()
-      .then(data => {return data.validationErrors;})
-    } else {
-      throw new Error();
-    };
+      return true;
+    } 
+    return response.json();
   };
 
   function handleSignOut() {

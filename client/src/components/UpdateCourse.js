@@ -16,6 +16,7 @@ const UpdateCourse = () => {
   const [description, setDescription] = useState(course.course.description);
   const [estimatedTime, setEstimatedTime] = useState(course.course.estimatedTime);
   const [materialsNeeded, setMaterialsNeeded] = useState(course.course.materialsNeeded);
+  const [errors, setErrors] = useState([]);
 
   // after the component renders, call function to fetch single course data
   useEffect(() => {
@@ -42,7 +43,9 @@ const UpdateCourse = () => {
 
     actions.updateCourse(id, courseBody)
       .then(response => {
-        if (response === true) {
+        if (response.errors) {
+          setErrors(response.errors);
+        } else {
           navigate(`/courses/${id}`);
         }
       })
@@ -53,6 +56,22 @@ const UpdateCourse = () => {
       <main>
         <div className="wrap">
           <h2>Update Course</h2>
+
+          {errors.length > 0 ? (
+          <div className="validation--errors">
+            <h3>Validation Errors</h3>
+            <ul>
+              {errors.map((error, index) => {
+                return ( 
+                  <li key={index}>{error}</li>
+                )
+              })}
+            </ul>
+          </div>  
+        ) : (
+          <></>
+        )}
+
           <form onSubmit={handleSubmit}>
             <div className="main--flex">
               <div>
